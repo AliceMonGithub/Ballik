@@ -15,6 +15,9 @@ namespace Scripts.GunLogic
     {
         //private const string FireButton = "Fire";
 
+        [SerializeField] private DroppedBallsWindow _droppedBalls;
+        [SerializeField] private BidBehaviour _bidBehaviour;
+
         public event Action<CellColor, CellColor, CellColor> StopAll;
         public event Action CanShot;
 
@@ -84,6 +87,9 @@ namespace Scripts.GunLogic
         {
             StopAll += (a, b, c) => Debug.Log("First " + a + " Second " + b + " Third " + c);
 
+            StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
+            StopAll += (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
+
             CanShot += () => _balls.ForEach(ball =>
             {
                 ball.Cell = ball.GetNearCell(true);
@@ -103,6 +109,9 @@ namespace Scripts.GunLogic
         private void OnDisable()
         {
             StopAll -= (a, b, c) => Debug.Log("First " + a + " Second " + b + " Third " + c);
+
+            StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
+            StopAll -= (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
 
             CanShot += () => _balls.ForEach(ball =>
             {

@@ -1,24 +1,43 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Scripts.CellLogic;
 using TMPro;
+using UnityEngine;
 
 public class BidBehaviour : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _firstBidText;
-    [SerializeField] TextMeshProUGUI _secondBidText;
-    [SerializeField] TextMeshProUGUI _thirdBidText;
-    [SerializeField] TextMeshProUGUI _fourthBidText;
-    [SerializeField] TextMeshProUGUI _fifthBidText;
-    [SerializeField] TextMeshProUGUI _sixthBidText;
+    // Значение ставок
+    [SerializeField] private TextMeshProUGUI _firstBidText;
+    [SerializeField] private TextMeshProUGUI _secondBidText;
+    [SerializeField] private TextMeshProUGUI _thirdBidText;
+    [SerializeField] private TextMeshProUGUI _fourthBidText;
+    [SerializeField] private TextMeshProUGUI _fifthBidText;
+    [SerializeField] private TextMeshProUGUI _sixthBidText;
 
-    [SerializeField] TextMeshProUGUI _betText;
+    [SerializeField] private TextMeshProUGUI _winText;
 
-    [SerializeField] private int _firstBid = 0;
-    [SerializeField] private int _secondBid = 0;
-    [SerializeField] private int _thirdBid = 0;
-    [SerializeField] private int _fourthBid = 0;
-    [SerializeField] private int _fifthBid = 0;
-    [SerializeField] private int _sixthBid = 0;
+    [Space]
+    // Эффекты
+    [SerializeField] ParticleSystem _firstBidEffect;
+    [SerializeField] ParticleSystem _secondBidEffect;
+    [SerializeField] ParticleSystem _thirdBidEffect;
+    [SerializeField] ParticleSystem _fourthBidEffect;
+    [SerializeField] ParticleSystem _fifthBidEffect;
+    [SerializeField] ParticleSystem _sixthBidEffect;
+
+    [Space]
+
+    [SerializeField] private TextMeshProUGUI _betText;
+
+    public static int _redRallsValue = -1;
+    public static int _starNumber = -1;
+
+    private int _winValue = 0;
+
+    private int _firstBid = 0;
+    private int _secondBid = 0;
+    private int _thirdBid = 0;
+    private int _fourthBid = 0;
+    private int _fifthBid = 0;
+    private int _sixthBid = 0;
 
     public int _FirstBid
     {
@@ -160,16 +179,89 @@ public class BidBehaviour : MonoBehaviour
         _FifthBid *= 0;
         _SixthBid *= 0;
     }
-
     public void RateCalculation()
     {
-        int i = _firstBid + _secondBid + 7*_thirdBid + 7*_fourthBid + 15*_fifthBid + 250*_sixthBid;
-        _betText.text = "" + i; 
+        int i = _firstBid + _secondBid + 7 * _thirdBid + 7 * _fourthBid + 15 * _fifthBid + 250 * _sixthBid;
+        _betText.text = "" + i;
+    }
+
+    private void DisplayWinningCombinations()
+    {
+        if (_redRallsValue == 0)
+        {
+            _fourthBidEffect.Play();
+            _winValue += _FourthBid;
+            _FourthBid = 0;
+
+        }
+        if (_redRallsValue == 1)
+        {
+            _firstBidEffect.Play();
+            _winValue += _FirstBid;
+            _FirstBid = 0;
+        }
+        if (_redRallsValue == 2)
+        {
+            _secondBidEffect.Play();
+            _winValue += _SecondBid;
+            _SecondBid = 0;
+        }
+        if (_redRallsValue == 3)
+        {
+            _thirdBidEffect.Play();
+            _winValue += _ThirdBid;
+            _ThirdBid = 0;
+        }
+        if(_starNumber == 1)
+        {
+            _fifthBidEffect.Play();
+            _winValue += _FifthBid;
+            _FifthBid = 0;
+        }
+        if (_starNumber == 2)
+        {
+            _sixthBidEffect.Play();
+            _winValue += _SixthBid;
+            _SixthBid = 0;
+        }
+    }
+
+    public void CheckingValueStars(CellColor a, CellColor b, CellColor c)
+    {
+        //Проверка на одну звезду
+        if((a == CellColor.StarBlack || a == CellColor.StarWhite) && (b == CellColor.White || b == CellColor.Black) && (c == CellColor.White || c == CellColor.Black))
+        {
+            _starNumber = 1;
+        }
+        if ((b == CellColor.StarBlack || b == CellColor.StarWhite) && (a == CellColor.White || a == CellColor.Black) && (c == CellColor.White || c == CellColor.Black))
+        {
+            _starNumber = 1;
+        }
+        if ((c == CellColor.StarBlack || c == CellColor.StarWhite) && (a == CellColor.White || a == CellColor.Black) && (b == CellColor.White || b == CellColor.Black))
+        {
+            _starNumber = 1;
+        }
+
+        //Проверка на 2 звезды
+        if ((a == CellColor.Black || a == CellColor.White) && (b == CellColor.StarWhite || b == CellColor.StarBlack) && (c == CellColor.StarWhite || c == CellColor.StarBlack))
+        {
+            _starNumber = 2;
+        }
+
+        if ((b == CellColor.Black || b == CellColor.White) && (a == CellColor.StarWhite || a == CellColor.StarBlack) && (c == CellColor.StarWhite || c == CellColor.StarBlack))
+        {
+            _starNumber = 2;
+        }
+        if ((c == CellColor.Black || c == CellColor.White) && (b == CellColor.StarWhite || b == CellColor.StarBlack) && (a == CellColor.StarWhite || a == CellColor.StarBlack))
+        {
+            _starNumber = 2;
+        }
     }
 
     private void Update()
     {
         RateCalculation();
+        DisplayWinningCombinations();
 
         _firstBidText.text = "" + _FirstBid;
         _secondBidText.text = "" + _SecondBid;
@@ -177,7 +269,7 @@ public class BidBehaviour : MonoBehaviour
         _fourthBidText.text = "" + _FourthBid;
         _fifthBidText.text = "" + _FifthBid;
         _sixthBidText.text = "" + _SixthBid;
+
+        _winText.text = "" + _winValue;
     }
-
-
 }
