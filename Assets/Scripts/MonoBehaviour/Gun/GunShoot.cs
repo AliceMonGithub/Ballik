@@ -97,26 +97,30 @@ namespace Scripts.GunLogic
             StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll += (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
             StopAll += (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
-            StopAll += (a, b, c) => _center.FirebutoonOff();
 
-            OnCanShot += () => _center.FirebutoonOff();
+            ActiveButton += () => _center.FirebutoonOn(); //*
+            DeactiveButton += () => _center.FirebutoonOff(); //*
+            AllBallsShot += () => _center.FirebutoonOff(); //*
 
             bool allStopped = false;
 
             OnCanShot += () => _balls.ForEach(ball =>
             {
+                
                 ball.Cell = ball.GetNearCell(true);
 
                 ball.Cell.Ball = ball;
 
                 ball.WaitWall = false;
                 ball.Triggered = false;
-                
+
                 if (_balls.Count == 3 && allStopped == false)
                 {
                     StopAll?.Invoke(_balls[0].CellColor, _balls[1].CellColor, _balls[2].CellColor);
                     
                     allStopped = true;
+
+                    
                 }
             });
         }
@@ -128,19 +132,23 @@ namespace Scripts.GunLogic
             StopAll -= (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll -= (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
             StopAll -= (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
-            StopAll -= (a, b, c) => _center.FirebutoonOff();
+
+            ActiveButton -= () => _center.FirebutoonOn(); //*
+            DeactiveButton -= () => _center.FirebutoonOff(); //*
+            AllBallsShot -= () => _center.FirebutoonOff();//*
 
             bool allStopped = false;
 
             OnCanShot -= () => _balls.ForEach(ball =>
             {
+                
                 ball.Cell = ball.GetNearCell(true);
 
                 ball.Cell.Ball = ball;
 
                 ball.WaitWall = false;
                 ball.Triggered = false;
-                
+
                 if (_balls.Count == 3 && allStopped == false)
                 {
                     StopAll?.Invoke(_balls[0].CellColor, _balls[1].CellColor, _balls[2].CellColor);

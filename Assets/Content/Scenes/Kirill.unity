@@ -1061,6 +1061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _droppedBalls: {fileID: 155975232}
   _bidBehaviour: {fileID: 72211142}
+  _center: {fileID: 868226044}
   _testJsons: []
   _prefab: {fileID: 6408909361049433069, guid: aba95a293f33b594b96188cd7ba35894, type: 3}
   _visionPrefab: {fileID: 1161153702331048829, guid: 3db64b09ed9ee1d48b0c189bd781c383, type: 3}
@@ -60940,6 +60941,7 @@ MonoBehaviour:
   _balanceText: {fileID: 675352551}
   _winText: {fileID: 472728344}
   _playAgaynBuntton: {fileID: 1580384587}
+  _fireButton: {fileID: 1266965477}
   _bidBehaviour: {fileID: 72211142}
 --- !u!1 &875167059
 GameObject:
