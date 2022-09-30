@@ -9,14 +9,26 @@ public class Center : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _balanceText;
     [SerializeField] private TextMeshProUGUI _winText;
     [SerializeField] private GameObject _playAgaynBuntton;
+    [SerializeField] private Button _fireButton;
 
     private int _balance = 0;
 
     [SerializeField] private BidBehaviour _bidBehaviour;
+
     private void Awake()
     {
         LoadData();
     }
+
+    public void FirebutoonOn()
+    {
+        _fireButton.interactable = true;
+    }
+    public void FirebutoonOff()
+    {
+        _fireButton.interactable = false;
+    }
+
     public void PlayAgayn()
     {
         _balance += Int32.Parse(_winText.text);

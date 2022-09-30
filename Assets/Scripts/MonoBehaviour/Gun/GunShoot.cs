@@ -17,6 +17,7 @@ namespace Scripts.GunLogic
 
         [SerializeField] private DroppedBallsWindow _droppedBalls;
         [SerializeField] private BidBehaviour _bidBehaviour;
+        [SerializeField] private Center _center;
 
         public event Action<CellColor, CellColor, CellColor> StopAll;
         public event Action OnCanShot;
@@ -24,7 +25,7 @@ namespace Scripts.GunLogic
         [SerializeField] private List<string> _testJsons;
 
         [Space]
-
+        
         [SerializeField] private Ball _prefab;
         [SerializeField] private BallVision _visionPrefab;
         [SerializeField] private int _speed;
@@ -91,6 +92,9 @@ namespace Scripts.GunLogic
             StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll += (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
             StopAll += (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
+            StopAll += (a, b, c) => _center.FirebutoonOff();
+
+            OnCanShot += () => _center.FirebutoonOff();
 
             bool allStopped = false;
 
@@ -102,11 +106,11 @@ namespace Scripts.GunLogic
 
                 ball.WaitWall = false;
                 ball.Triggered = false;
-
+                
                 if (_balls.Count == 3 && allStopped == false)
                 {
                     StopAll?.Invoke(_balls[0].CellColor, _balls[1].CellColor, _balls[2].CellColor);
-
+                    
                     allStopped = true;
                 }
             });
@@ -119,6 +123,7 @@ namespace Scripts.GunLogic
             StopAll -= (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll -= (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
             StopAll -= (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
+            StopAll -= (a, b, c) => _center.FirebutoonOff();
 
             bool allStopped = false;
 
@@ -130,7 +135,7 @@ namespace Scripts.GunLogic
 
                 ball.WaitWall = false;
                 ball.Triggered = false;
-
+                
                 if (_balls.Count == 3 && allStopped == false)
                 {
                     StopAll?.Invoke(_balls[0].CellColor, _balls[1].CellColor, _balls[2].CellColor);
@@ -269,5 +274,7 @@ namespace Scripts.GunLogic
 
             _jsons.Add(www.downloadHandler.text);
         }
+
+
     }
 }
