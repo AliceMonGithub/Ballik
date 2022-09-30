@@ -22,6 +22,11 @@ namespace Scripts.GunLogic
         public event Action<CellColor, CellColor, CellColor> StopAll;
         public event Action OnCanShot;
 
+        public event Action DeactiveButton;
+        public event Action ActiveButton;
+
+        public event Action AllBallsShot;
+
         [SerializeField] private List<string> _testJsons;
 
         [Space]
@@ -143,11 +148,28 @@ namespace Scripts.GunLogic
                     allStopped = true;
                 }
             });
+
+            OnCanShot -= () =>
+            {
+                if (_balls.Count != 3)
+                {
+                    ActiveButton?.Invoke();
+                }
+            };
         }
 
         public void Shot()
         {
             if (CanShot) return; // проверка можно ли выстрелить
+
+            if(_balls.Count == 3)
+            {
+                AllBallsShot?.Invoke();
+            }
+            else
+            {
+                DeactiveButton?.Invoke();
+            }
 
             // рандомизируем шарики
 
