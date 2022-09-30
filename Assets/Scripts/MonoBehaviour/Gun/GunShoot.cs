@@ -19,7 +19,7 @@ namespace Scripts.GunLogic
         [SerializeField] private BidBehaviour _bidBehaviour;
 
         public event Action<CellColor, CellColor, CellColor> StopAll;
-        public event Action CanShot;
+        public event Action OnCanShot;
 
         [SerializeField] private List<string> _testJsons;
 
@@ -59,6 +59,7 @@ namespace Scripts.GunLogic
         private bool _allStopped;
         private bool _getAll;
 
+        public bool CanShot => _balls.Count > 0 && _balls.Any(bal => bal.Stopped == false) == true;
         public List<Ball> Balls => _balls;
 
         private void Awake()
@@ -74,7 +75,7 @@ namespace Scripts.GunLogic
             {
                 _allStopped = true;
 
-                CanShot?.Invoke();
+                OnCanShot?.Invoke();
             }
 
             //if (Input.GetButtonDown("Fire1"))
@@ -93,7 +94,7 @@ namespace Scripts.GunLogic
 
             bool allStopped = false;
 
-            CanShot += () => _balls.ForEach(ball =>
+            OnCanShot += () => _balls.ForEach(ball =>
             {
                 ball.Cell = ball.GetNearCell(true);
 
@@ -121,7 +122,7 @@ namespace Scripts.GunLogic
 
             bool allStopped = false;
 
-            CanShot -= () => _balls.ForEach(ball =>
+            OnCanShot -= () => _balls.ForEach(ball =>
             {
                 ball.Cell = ball.GetNearCell(true);
 
@@ -141,7 +142,7 @@ namespace Scripts.GunLogic
 
         public void Shot()
         {
-            if (_balls.Count > 0 && _balls.Any(bal => bal.Stopped == false) == true) return; // проверка можно ли выстрелить
+            if (CanShot) return; // проверка можно ли выстрелить
 
             // рандомизируем шарики
 
