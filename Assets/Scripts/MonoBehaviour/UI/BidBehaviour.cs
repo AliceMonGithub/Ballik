@@ -13,6 +13,8 @@ public class BidBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _fifthBidText;
     [SerializeField] private TextMeshProUGUI _sixthBidText;
 
+    private int[] _latestBids;
+
     public TextMeshProUGUI _winText;
 
     [Space]
