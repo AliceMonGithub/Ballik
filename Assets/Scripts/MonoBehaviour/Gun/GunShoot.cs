@@ -119,6 +119,14 @@ namespace Scripts.GunLogic
                     allStopped = true;
                 }
             });
+
+            OnCanShot += () =>
+            {
+                if (_balls.Count != 3)
+                {
+                    ActiveButton?.Invoke();
+                }
+            };
         }
 
         private void OnDisable()
