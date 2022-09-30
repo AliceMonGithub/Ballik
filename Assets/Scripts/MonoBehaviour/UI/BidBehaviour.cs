@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BidBehaviour : MonoBehaviour
 {
+    [SerializeField] private GameObject _playAgaynButton;
     // «начение ставок
     [SerializeField] private TextMeshProUGUI _firstBidText;
     [SerializeField] private TextMeshProUGUI _secondBidText;
@@ -12,7 +13,7 @@ public class BidBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _fifthBidText;
     [SerializeField] private TextMeshProUGUI _sixthBidText;
 
-    [SerializeField] private TextMeshProUGUI _winText;
+    public TextMeshProUGUI _winText;
 
     [Space]
     // Ёффекты
@@ -136,6 +137,7 @@ public class BidBehaviour : MonoBehaviour
         }
     }
 
+
     public void FirstBidIncrease()
     {
         _FirstBid++;
@@ -181,55 +183,49 @@ public class BidBehaviour : MonoBehaviour
     }
     public void RateCalculation()
     {
-        int i = _firstBid + _secondBid + 7 * _thirdBid + 7 * _fourthBid + 15 * _fifthBid + 250 * _sixthBid;
-        _betText.text = "" + i;
+        int i = _FirstBid + _SecondBid + 7 * _ThirdBid + 7 * _FourthBid + 15 * _FifthBid + 250 * _SixthBid;
+        _betText.text = i.ToString();
     }
 
-    private void DisplayWinningCombinations()
+    public void DisplayWinningCombinations()
     {
         if (_redRallsValue == 0)
         {
             _fourthBidEffect.Play();
-            _winValue += _FourthBid;
-            _FourthBid = 0;
-
+            _winValue += _FourthBid * 7;
         }
         if (_redRallsValue == 1)
         {
             _firstBidEffect.Play();
             _winValue += _FirstBid;
-            _FirstBid = 0;
         }
         if (_redRallsValue == 2)
         {
             _secondBidEffect.Play();
             _winValue += _SecondBid;
-            _SecondBid = 0;
         }
         if (_redRallsValue == 3)
         {
             _thirdBidEffect.Play();
-            _winValue += _ThirdBid;
-            _ThirdBid = 0;
+            _winValue += _ThirdBid * 7;
         }
-        if(_starNumber == 1)
+        if (_starNumber == 1)
         {
             _fifthBidEffect.Play();
-            _winValue += _FifthBid;
-            _FifthBid = 0;
+            _winValue += _FifthBid * 15;
         }
         if (_starNumber == 2)
         {
             _sixthBidEffect.Play();
-            _winValue += _SixthBid;
-            _SixthBid = 0;
+            _winValue += _SixthBid * 250;
         }
+        _winText.text = _winValue.ToString();
     }
 
     public void CheckingValueStars(CellColor a, CellColor b, CellColor c)
     {
         //ѕроверка на одну звезду
-        if((a == CellColor.StarBlack || a == CellColor.StarWhite) && (b == CellColor.White || b == CellColor.Black) && (c == CellColor.White || c == CellColor.Black))
+        if ((a == CellColor.StarBlack || a == CellColor.StarWhite) && (b == CellColor.White || b == CellColor.Black) && (c == CellColor.White || c == CellColor.Black))
         {
             _starNumber = 1;
         }
@@ -256,20 +252,19 @@ public class BidBehaviour : MonoBehaviour
         {
             _starNumber = 2;
         }
+        _playAgaynButton.SetActive(true);
     }
 
     private void Update()
     {
         RateCalculation();
-        DisplayWinningCombinations();
+        //DisplayWinningCombinations();
 
-        _firstBidText.text = "" + _FirstBid;
-        _secondBidText.text = "" + _SecondBid;
-        _thirdBidText.text = "" + _ThirdBid;
-        _fourthBidText.text = "" + _FourthBid;
-        _fifthBidText.text = "" + _FifthBid;
-        _sixthBidText.text = "" + _SixthBid;
-
-        _winText.text = "" + _winValue;
+        _firstBidText.text = _FirstBid.ToString(); 
+        _secondBidText.text = _SecondBid.ToString(); 
+        _thirdBidText.text = _ThirdBid.ToString(); 
+        _fourthBidText.text = _FourthBid.ToString();
+        _fifthBidText.text = _FifthBid.ToString();
+        _sixthBidText.text = _SixthBid.ToString();
     }
 }

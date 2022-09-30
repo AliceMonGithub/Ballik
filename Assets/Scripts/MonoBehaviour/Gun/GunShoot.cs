@@ -89,6 +89,7 @@ namespace Scripts.GunLogic
 
             StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll += (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
+            StopAll += (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
 
             CanShot += () => _balls.ForEach(ball =>
             {
@@ -110,8 +111,9 @@ namespace Scripts.GunLogic
         {
             StopAll -= (a, b, c) => Debug.Log("First " + a + " Second " + b + " Third " + c);
 
-            StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
+            StopAll -= (a, b, c) => _droppedBalls.BallsResult(a, b, c);
             StopAll -= (a, b, c) => _bidBehaviour.CheckingValueStars(a, b, c);
+            StopAll -= (a, b, c) => _bidBehaviour.DisplayWinningCombinations();
 
             CanShot += () => _balls.ForEach(ball =>
             {
@@ -139,7 +141,7 @@ namespace Scripts.GunLogic
 
             _balls.ForEach(bel =>
             {
-                ind2 = UnityEngine.Random.Range(0, 4);
+                ind2 = 1; //UnityEngine.Random.Range(0, 4); //1;
 
                 bel.SetColor(GetColorByIndex(ind2));
                 bel.CellColor = GetColorByIndex(ind2);
@@ -194,7 +196,7 @@ namespace Scripts.GunLogic
 
             ball.Rigidbody.AddForce(_direction.up * _speed, ForceMode2D.Impulse);
 
-            var ind = UnityEngine.Random.Range(0, 4);
+            var ind = 1; //UnityEngine.Random.Range(0, 4); //1;
 
             ball.SetColor(GetColorByIndex(ind), true);
             ball.CellColor = GetColorByIndex(ind);
