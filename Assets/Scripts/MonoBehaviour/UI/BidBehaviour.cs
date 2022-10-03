@@ -201,48 +201,54 @@ public class BidBehaviour : MonoBehaviour
         _betText.text = ((_betValue)).ToString();
     }
 
-    private void WinText()
-    {
-        if (_payBack == true)
-        {
-            float i = 0;
-            i = Mathf.Ceil(Mathf.Lerp(i, _winValue, Time.deltaTime * 2.0f));
-            _winText.text = (i).ToString();
-            _payBack = false;
-        }
-    }
+    //private void WinText()
+    //{
+    //    if (_payBack == true)
+    //    {
+    //        float i = 0;
+    //        i = Mathf.Ceil(Mathf.Lerp(i, _winValue, Time.deltaTime * 2.0f));
+    //        _winText.text = (i).ToString();
+    //        _payBack = false;
+    //    }
+    //}
 
     public void DisplayWinningCombinations()
     {
         if (_redRallsValue == 0)
         {
             _fourthBidEffect.Play();
-            _winValue += _FourthBid * 7;
+            _winValue += _FourthBid * 7; 
+            _winText.text = (_winValue).ToString();
         }
         if (_redRallsValue == 1)
         {
             _firstBidEffect.Play();
             _winValue += _FirstBid;
+            _winText.text = (_winValue).ToString();
         }
         if (_redRallsValue == 2)
         {
             _secondBidEffect.Play();
             _winValue += _SecondBid;
+            _winText.text = (_winValue).ToString();
         }
         if (_redRallsValue == 3)
         {
             _thirdBidEffect.Play();
             _winValue += _ThirdBid * 7;
+            _winText.text = (_winValue).ToString();
         }
         if (_starNumber == 1)
         {
             _fifthBidEffect.Play();
             _winValue += _FifthBid * 15;
+            _winText.text = (_winValue).ToString();
         }
         if (_starNumber == 2)
         {
             _sixthBidEffect.Play();
             _winValue += _SixthBid * 250;
+            _winText.text = (_winValue).ToString();
         }
 
         print(_winValue);
@@ -324,7 +330,7 @@ public class BidBehaviour : MonoBehaviour
 
     private void Update()
     {
-        WinText();
+        //WinText();
         //RateCalculation();
         //DisplayWinningCombinations();
 
