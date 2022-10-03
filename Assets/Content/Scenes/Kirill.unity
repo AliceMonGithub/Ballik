@@ -11196,7 +11196,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 72211142}
         m_TargetAssemblyTypeName: BidBehaviour, Assembly-CSharp
-        m_MethodName: InitLAST
+        m_MethodName: RateCalculation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
