@@ -172,6 +172,26 @@ public class BidBehaviour : MonoBehaviour
         _SixthBid++;
     }
 
+    public void SetLAST()
+    {
+        _FirstBid = PlayerPrefs.GetInt("firstbid");
+        _SecondBid = PlayerPrefs.GetInt("secondbid");
+        _ThirdBid = PlayerPrefs.GetInt("thirdbid");
+        _FourthBid = PlayerPrefs.GetInt("fourthbid");
+        _FifthBid = PlayerPrefs.GetInt("fifthbid");
+        _SixthBid = PlayerPrefs.GetInt("sixthbid");
+    }
+
+    public void InitLAST()
+    {
+         PlayerPrefs.SetInt("firstbid", _FirstBid);
+         PlayerPrefs.SetInt("secondbid", _SecondBid);
+         PlayerPrefs.SetInt("thirdbid", _ThirdBid);
+         PlayerPrefs.SetInt("fourthbid", _FourthBid);
+         PlayerPrefs.SetInt("fifthbid", _FifthBid);
+         PlayerPrefs.SetInt("sixthbid", _SixthBid);
+    }
+
     public void X2Button()
     {
         _FirstBid *= 2;
@@ -266,13 +286,14 @@ public class BidBehaviour : MonoBehaviour
         float elapsed = 0.0f;
         while (elapsed < _time)
         {
+            elapsed += Time.deltaTime;
+
             _smoothWin = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
             print(elapsed / _time);
 
             _winText.text = (Mathf.Ceil(_smoothWin)).ToString();
 
-            elapsed += Time.deltaTime;
             yield return null;
         }
 
@@ -284,11 +305,12 @@ public class BidBehaviour : MonoBehaviour
         float elapsed = 0.0f;
         while (elapsed < _time)
         {
+            elapsed += Time.deltaTime;
+
             _smoothBet = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
             _betText.text = (Mathf.Ceil(_smoothBet)).ToString();
 
-            elapsed += Time.deltaTime;
             yield return null;
         }
 

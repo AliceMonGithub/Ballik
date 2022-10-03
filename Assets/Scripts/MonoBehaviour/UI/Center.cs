@@ -71,7 +71,7 @@ public class Center : MonoBehaviour
         {
             _smoothBalance = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            _balanceText.text = _smoothBalance.ToString();
+            _balanceText.text = (Mathf.Ceil(_smoothBalance)).ToString();
 
             elapsed += Time.deltaTime;
             yield return null;
