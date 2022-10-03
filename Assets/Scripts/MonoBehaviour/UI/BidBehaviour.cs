@@ -1,4 +1,5 @@
 using Scripts.CellLogic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -29,12 +30,15 @@ public class BidBehaviour : MonoBehaviour
     [Space]
 
     [SerializeField] private TextMeshProUGUI _betText;
+    [SerializeField] private float _time;
 
     public static int _redRallsValue = -1;
     public static int _starNumber = -1;
 
     private float _winValue = 0;
     private float _betValue = 0; //*
+    private float _smoothBet;
+    private float _smoothWin;
 
     private bool _payBack;
 
@@ -190,7 +194,10 @@ public class BidBehaviour : MonoBehaviour
     public void RateCalculation()
     {
         int i = _FirstBid + _SecondBid + 7 * _ThirdBid + 7 * _FourthBid + 15 * _FifthBid + 250 * _SixthBid;
-        _betValue = Mathf.Ceil(Mathf.Lerp(_betValue, i, Time.deltaTime * 2.0f));
+
+        StopCoroutine(SmoothBalance(int.Parse(_betText.text), i));
+        StartCoroutine(SmoothBalance(int.Parse(_betText.text), i));
+
         _betText.text = ((_betValue)).ToString();
     }
 
@@ -237,8 +244,49 @@ public class BidBehaviour : MonoBehaviour
             _sixthBidEffect.Play();
             _winValue += _SixthBid * 250;
         }
-        //_winText.text = _winValue.ToString();
+
+        print(_winValue);
+
+        StopCoroutine(SmoothWin(0, _winValue));
+        StartCoroutine(SmoothWin(0, _winValue));
+
+        print("win");
+
         _payBack = true;
+    }
+
+    IEnumerator SmoothWin(float v_start, float v_end)
+    {
+        float elapsed = 0.0f;
+        while (elapsed < _time)
+        {
+            _smoothWin = Mathf.Lerp(v_start, v_end, elapsed / _time);
+
+            print(elapsed / _time);
+
+            _winText.text = (Mathf.Ceil(_smoothWin)).ToString();
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        _smoothWin = v_end;
+    }
+
+    IEnumerator SmoothBalance(float v_start, float v_end)
+    {
+        float elapsed = 0.0f;
+        while (elapsed < _time)
+        {
+            _smoothBet = Mathf.Lerp(v_start, v_end, elapsed / _time);
+
+            _betText.text = (Mathf.Ceil(_smoothBet)).ToString();
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        _smoothBet = v_end;
     }
 
     public void CheckingValueStars(CellColor a, CellColor b, CellColor c)
@@ -277,7 +325,7 @@ public class BidBehaviour : MonoBehaviour
     private void Update()
     {
         WinText();
-        RateCalculation();
+        //RateCalculation();
         //DisplayWinningCombinations();
 
         _firstBidText.text = _FirstBid.ToString(); 
@@ -286,8 +334,5 @@ public class BidBehaviour : MonoBehaviour
         _fourthBidText.text = _FourthBid.ToString();
         _fifthBidText.text = _FifthBid.ToString();
         _sixthBidText.text = _SixthBid.ToString();
-        Debug.Log(_FourthBid);
-
-        
     }
 }
