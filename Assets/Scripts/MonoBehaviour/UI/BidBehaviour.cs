@@ -33,7 +33,10 @@ public class BidBehaviour : MonoBehaviour
     public static int _redRallsValue = -1;
     public static int _starNumber = -1;
 
-    private int _winValue = 0;
+    private float _winValue = 0;
+    private float _betValue = 0; //*
+
+    private bool _payBack;
 
     private int _firstBid = 0;
     private int _secondBid = 0;
@@ -183,10 +186,23 @@ public class BidBehaviour : MonoBehaviour
         _FifthBid *= 0;
         _SixthBid *= 0;
     }
+
     public void RateCalculation()
     {
         int i = _FirstBid + _SecondBid + 7 * _ThirdBid + 7 * _FourthBid + 15 * _FifthBid + 250 * _SixthBid;
-        _betText.text = i.ToString();
+        _betValue = Mathf.Ceil(Mathf.Lerp(_betValue, i, Time.deltaTime * 2.0f));
+        _betText.text = ((_betValue)).ToString();
+    }
+
+    private void WinText()
+    {
+        if (_payBack == true)
+        {
+            float i = 0;
+            i = Mathf.Ceil(Mathf.Lerp(i, _winValue, Time.deltaTime * 2.0f));
+            _winText.text = (i).ToString();
+            _payBack = false;
+        }
     }
 
     public void DisplayWinningCombinations()
@@ -221,7 +237,8 @@ public class BidBehaviour : MonoBehaviour
             _sixthBidEffect.Play();
             _winValue += _SixthBid * 250;
         }
-        _winText.text = _winValue.ToString();
+        //_winText.text = _winValue.ToString();
+        _payBack = true;
     }
 
     public void CheckingValueStars(CellColor a, CellColor b, CellColor c)
@@ -259,6 +276,7 @@ public class BidBehaviour : MonoBehaviour
 
     private void Update()
     {
+        WinText();
         RateCalculation();
         //DisplayWinningCombinations();
 
@@ -268,5 +286,8 @@ public class BidBehaviour : MonoBehaviour
         _fourthBidText.text = _FourthBid.ToString();
         _fifthBidText.text = _FifthBid.ToString();
         _sixthBidText.text = _SixthBid.ToString();
+        Debug.Log(_FourthBid);
+
+        
     }
 }
