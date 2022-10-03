@@ -70,7 +70,7 @@ namespace Scripts.GunLogic
 
         private void Awake()
         {
-            StartCoroutine(SetAllHTML());
+            //StartCoroutine(SetAllHTML());
 
             _cells = FindObjectsOfType<Cell>();
         }
@@ -203,23 +203,23 @@ namespace Scripts.GunLogic
 
             // Парсим json
 
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<int, int>>(_jsons[_urlIndex]);
-            KeyValuePair<int, int> lastPair = new();
+            //var dictionary = JsonConvert.DeserializeObject<Dictionary<int, int>>(_jsons[_urlIndex]);
+            //KeyValuePair<int, int> lastPair = new();
 
-            foreach (var pair in dictionary)
-            {
-                int[] array = dictionary.Keys.ToArray();
+            //foreach (var pair in dictionary)
+            //{
+            //    int[] array = dictionary.Keys.ToArray();
 
-                if (pair.Key == array[array.Length - 1])
-                {
-                    lastPair = pair;
+            //    if (pair.Key == array[array.Length - 1])
+            //    {
+            //        lastPair = pair;
 
-                    break;
-                }
+            //        break;
+            //    }
 
-                //_balls[pair.Key - 1].SetColor(GetColorByIndex(pair.Value));
-                //_balls[pair.Key - 1].CellColor = GetColorByIndex(pair.Value);
-            }
+            //    //_balls[pair.Key - 1].SetColor(GetColorByIndex(pair.Value));
+            //    //_balls[pair.Key - 1].CellColor = GetColorByIndex(pair.Value);
+            //}
 
             // Получаем список целей для шарика
 
