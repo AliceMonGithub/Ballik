@@ -193,7 +193,7 @@ namespace Scripts.GunLogic
 
             _balls.ForEach(bel =>
             {
-                ind2 = 1; //UnityEngine.Random.Range(0, 4); //1;
+                ind2 = UnityEngine.Random.Range(0, 4); //1;
 
                 bel.SetColor(GetColorByIndex(ind2));
                 bel.CellColor = GetColorByIndex(ind2);
@@ -248,7 +248,7 @@ namespace Scripts.GunLogic
 
             ball.Rigidbody.AddForce(_direction.up * _speed, ForceMode2D.Impulse);
 
-            var ind = 1; //UnityEngine.Random.Range(0, 4); //1;
+            var ind = UnityEngine.Random.Range(0, 4); //1;
 
             ball.SetColor(GetColorByIndex(ind), true);
             ball.CellColor = GetColorByIndex(ind);
