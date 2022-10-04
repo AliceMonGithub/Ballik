@@ -215,8 +215,8 @@ public class BidBehaviour : MonoBehaviour
     {
         int i = _FirstBid + _SecondBid + 7 * _ThirdBid + 7 * _FourthBid + 15 * _FifthBid + 250 * _SixthBid;
 
-        StopCoroutine(SmoothBalance(int.Parse(_betText.text), i));
-        StartCoroutine(SmoothBalance(int.Parse(_betText.text), i));
+        StopCoroutine(SmoothBet(int.Parse(_betText.text), i));
+        StartCoroutine(SmoothBet(int.Parse(_betText.text), i));
 
         _betText.text = ((_betValue)).ToString();
     }
@@ -290,17 +290,16 @@ public class BidBehaviour : MonoBehaviour
 
             _smoothWin = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            print(elapsed / _time);
-
-            _winText.text = (Mathf.Ceil(_smoothWin)).ToString();
+            _winText.text = (Mathf.Ceil(_smoothWin)).ToString() + " $";
 
             yield return null;
         }
 
+        _winText.text = v_end.ToString() + " $";
         _smoothWin = v_end;
     }
 
-    IEnumerator SmoothBalance(float v_start, float v_end)
+    IEnumerator SmoothBet(float v_start, float v_end)
     {
         float elapsed = 0.0f;
         while (elapsed < _time)
@@ -309,11 +308,12 @@ public class BidBehaviour : MonoBehaviour
 
             _smoothBet = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            _betText.text = (Mathf.Ceil(_smoothBet)).ToString();
+            _betText.text = (Mathf.Ceil(_smoothBet)).ToString() + " $";
 
             yield return null;
         }
 
+        _betText.text = v_end.ToString() + " $";
         _smoothBet = v_end;
     }
 

@@ -288,31 +288,5 @@ namespace Scripts.GunLogic
                 _ => throw new Exception(":(")
             };
         }
-
-        // получаем html код всех сайтов
-
-        private IEnumerator<WaitForSeconds> SetAllHTML()
-        {
-            foreach (string url in _urls)
-            {
-                StartCoroutine(GetHTML(url));
-
-                yield return new WaitForSeconds(0.1f);
-            }
-
-            _getAll = true;
-        }
-
-        // получаем html код с сайта
-
-        private IEnumerator<UnityWebRequestAsyncOperation> GetHTML(string url)
-        {
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            yield return www.SendWebRequest();
-
-            _jsons.Add(www.downloadHandler.text);
-        }
-
-
     }
 }
