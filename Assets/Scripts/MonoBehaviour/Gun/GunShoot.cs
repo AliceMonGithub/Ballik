@@ -7,10 +7,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+
+public class ShotData
+{
+    public string result;
+    public int win;
+    public int balans;
+    public string name;
+    public Dictionary<int, int>[] bals;
+}
 
 namespace Scripts.GunLogic
 {
-
     public class GunShoot : MonoBehaviour
     {
         //private const string FireButton = "Fire";
@@ -18,6 +27,7 @@ namespace Scripts.GunLogic
         [SerializeField] private DroppedBallsWindow _droppedBalls;
         [SerializeField] private BidBehaviour _bidBehaviour;
         [SerializeField] private Center _center;
+        [SerializeField] private Button _button;
 
         public event Action<CellColor, CellColor, CellColor> StopAll;
         public event Action OnCanShot;
@@ -65,7 +75,7 @@ namespace Scripts.GunLogic
         private bool _allStopped;
         private bool _getAll;
 
-        private ShotData _shotData;
+        public static ShotData _shotData;
 
         public bool CanShot => _balls.Count > 0 && _balls.Any(bal => bal.Stopped == false) == true;
         private string urlShot => "https://ballstest.ru/?sessia_id=" + Const.SessiaID + "&action=shot";
@@ -90,10 +100,10 @@ namespace Scripts.GunLogic
                 OnCanShot?.Invoke();
             }
 
-            //if (Input.GetButtonDown("Fire1"))
-            //{
-            //    Shot();
-            //}
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _button.onClick.Invoke();
+            }
         }
 
         private void OnEnable()
@@ -107,6 +117,10 @@ namespace Scripts.GunLogic
             ActiveButton += () => _center.FirebutoonOn(); //*
             DeactiveButton += () => _center.FirebutoonOff(); //*
             AllBallsShot += () => _center.FirebutoonOff(); //*
+
+            DeactiveButton += () => _center.AddBalance();
+
+            DeactiveButton += () => _bidBehaviour.AddWin();
 
             bool allStopped = false;
 
@@ -150,6 +164,10 @@ namespace Scripts.GunLogic
             ActiveButton -= () => _center.FirebutoonOn(); //*
             DeactiveButton -= () => _center.FirebutoonOff(); //*
             AllBallsShot -= () => _center.FirebutoonOff();//*
+
+            DeactiveButton -= () => _center.AddBalance();
+
+            DeactiveButton -= () => _bidBehaviour.AddWin();
 
             bool allStopped = false;
 
@@ -205,7 +223,6 @@ namespace Scripts.GunLogic
             //    bel.CellColor = GetColorByIndex(ind2);
 
             //});
-
 
             // Парсим json
 

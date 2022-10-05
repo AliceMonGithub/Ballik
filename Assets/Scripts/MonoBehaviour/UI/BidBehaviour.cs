@@ -1,4 +1,5 @@
 using Scripts.CellLogic;
+using Scripts.GunLogic;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -279,6 +280,16 @@ public class BidBehaviour : MonoBehaviour
         print("win");
 
         _payBack = true;
+    }
+
+    public void AddWin()
+    {
+        float oldValue = _winValue;
+
+        _winValue += GunShoot._shotData.win;
+
+        StopCoroutine(SmoothWin(oldValue, _winValue));
+        StartCoroutine(SmoothWin(oldValue, _winValue));
     }
 
     IEnumerator SmoothWin(float v_start, float v_end)

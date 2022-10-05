@@ -1062,6 +1062,7 @@ MonoBehaviour:
   _droppedBalls: {fileID: 155975232}
   _bidBehaviour: {fileID: 72211142}
   _center: {fileID: 868226044}
+  _button: {fileID: 1266965477}
   _testJsons: []
   _prefab: {fileID: 4411825104440673675, guid: 4237c0531c1f2ef489f17ee9bf476a49, type: 3}
   _visionPrefab: {fileID: 1161153702331048829, guid: 3db64b09ed9ee1d48b0c189bd781c383, type: 3}

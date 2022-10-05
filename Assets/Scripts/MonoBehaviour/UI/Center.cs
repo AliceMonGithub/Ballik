@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Scripts.GunLogic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,12 +9,6 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ShotData
-{
-    public string result;
-    public string name;
-    public Dictionary<int, int>[] bals;
-}
 public class Center : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _balanceText;
@@ -27,6 +22,7 @@ public class Center : MonoBehaviour
     private float _smoothBalance;
     private float _smoothCredit;
     private int _balance = 0;
+    private int _htmlBalance = 0;
     private int _credit = 0;
 
     [SerializeField] private BidBehaviour _bidBehaviour;
@@ -57,6 +53,14 @@ public class Center : MonoBehaviour
         SaveData();
         Restart();
     }
+
+    public void AddBalance()
+    {
+        _balance += GunShoot._shotData.balans;
+
+        StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), _balance + _htmlBalance));
+    }
+
     public void SaveData()
     {
         PlayerPrefs.SetInt("balance", _balance + PlayerPrefs.GetInt("balance"));
@@ -73,7 +77,11 @@ public class Center : MonoBehaviour
         {
             var showBalance = PlayerPrefs.GetInt("balance") + int.Parse(balance);
 
-            StartCoroutine(SmoothBalance(0, showBalance));
+            _htmlBalance = int.Parse(balance);
+
+            bool zero = PlayerPrefs.GetInt("balance") == 0;
+
+            StartCoroutine(SmoothBalance(zero ? 0 : _htmlBalance, showBalance));
         }
 
         if (dictionary.TryGetValue("1_credit", out string credit))
@@ -82,7 +90,9 @@ public class Center : MonoBehaviour
 
             _credit = int.Parse(cr);// PlayerPrefs.GetInt("balance") + int.Parse(balance);
 
-            StartCoroutine(SmoothCredit(0, _credit));
+            _creditText.text = _credit.ToString() + "$";
+
+            //StartCoroutine(SmoothCredit(0, _credit));
         }
         //_balanceText.text = _balance.ToString();
     }
