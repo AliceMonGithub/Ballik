@@ -8,6 +8,12 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public class ShotData
+{
+    public string result;
+    public string name;
+    public Dictionary<int, int>[] bals;
+}
 public class Center : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _balanceText;
@@ -29,7 +35,7 @@ public class Center : MonoBehaviour
 
     private void Awake()
     {
-        WaitHTML(LoadData);
+        WaitHTML(url, LoadData);
     }
 
     public void FirebutoonOn()
@@ -43,7 +49,7 @@ public class Center : MonoBehaviour
 
     public void PlayAgayn()
     {
-        _balance += Int32.Parse(_winText.text);
+        _balance += int.Parse(_winText.text);
 
         StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), _balance));
 
@@ -53,7 +59,7 @@ public class Center : MonoBehaviour
     }
     public void SaveData()
     {
-        PlayerPrefs.SetInt("balance", _balance);
+        PlayerPrefs.SetInt("balance", _balance + PlayerPrefs.GetInt("balance"));
         PlayerPrefs.Save();
 
         StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), PlayerPrefs.GetInt("balance")));
@@ -65,9 +71,9 @@ public class Center : MonoBehaviour
 
         if (dictionary.TryGetValue("balans", out string balance))
         {
-            _balance = int.Parse(balance);// PlayerPrefs.GetInt("balance") + int.Parse(balance);
+            var showBalance = PlayerPrefs.GetInt("balance") + int.Parse(balance);
 
-            StartCoroutine(SmoothBalance(0, _balance));
+            StartCoroutine(SmoothBalance(0, showBalance));
         }
 
         if (dictionary.TryGetValue("1_credit", out string credit))
@@ -92,13 +98,13 @@ public class Center : MonoBehaviour
         {
             _smoothBalance = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            _balanceText.text = (Mathf.Ceil(_smoothBalance)).ToString() + " $";
+            _balanceText.text = (Mathf.Ceil(_smoothBalance)).ToString();
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        _balanceText.text = v_end.ToString() + " $";
+        _balanceText.text = v_end.ToString();
         _smoothBalance = v_end;
     }
 
@@ -120,9 +126,9 @@ public class Center : MonoBehaviour
     }
 
     // получаем html код всех сайтов
-    private void WaitHTML(Action<string> action = null)
+    private void WaitHTML(string src, Action<string> action = null)
     {
-        StartCoroutine(GetHTML(url, action));
+        StartCoroutine(GetHTML(src, action));
     }
 
     // получаем html код с сайта

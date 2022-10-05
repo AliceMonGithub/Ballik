@@ -290,12 +290,12 @@ public class BidBehaviour : MonoBehaviour
 
             _smoothWin = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            _winText.text = (Mathf.Ceil(_smoothWin)).ToString() + " $";
+            _winText.text = (Mathf.Ceil(_smoothWin)).ToString();
 
             yield return null;
         }
 
-        _winText.text = v_end.ToString() + " $";
+        _winText.text = v_end.ToString();
         _smoothWin = v_end;
     }
 
@@ -308,12 +308,12 @@ public class BidBehaviour : MonoBehaviour
 
             _smoothBet = Mathf.Lerp(v_start, v_end, elapsed / _time);
 
-            _betText.text = (Mathf.Ceil(_smoothBet)).ToString() + " $";
+            _betText.text = (Mathf.Ceil(_smoothBet)).ToString();
 
             yield return null;
         }
 
-        _betText.text = v_end.ToString() + " $";
+        _betText.text = v_end.ToString();
         _smoothBet = v_end;
     }
 

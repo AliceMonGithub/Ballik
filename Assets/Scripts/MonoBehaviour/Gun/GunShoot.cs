@@ -65,12 +65,18 @@ namespace Scripts.GunLogic
         private bool _allStopped;
         private bool _getAll;
 
+        private ShotData _shotData;
+
         public bool CanShot => _balls.Count > 0 && _balls.Any(bal => bal.Stopped == false) == true;
+        private string urlShot => "https://ballstest.ru/?sessia_id=" + Const.SessiaID + "&action=shot";
+
         public List<Ball> Balls => _balls;
 
         private void Awake()
         {
             //StartCoroutine(SetAllHTML());
+
+            WaitHTML(urlShot, InitShots);
 
             _cells = FindObjectsOfType<Cell>();
         }
@@ -189,37 +195,36 @@ namespace Scripts.GunLogic
 
             // рандомизируем шарики
 
-            var ind2 = 0;
+            //var ind2 = 0;
 
-            _balls.ForEach(bel =>
-            {
-                ind2 = UnityEngine.Random.Range(0, 4); //1;
+            //_balls.ForEach(bel =>
+            //{
+            //    ind2 = UnityEngine.Random.Range(0, 4); //1;
 
-                bel.SetColor(GetColorByIndex(ind2));
-                bel.CellColor = GetColorByIndex(ind2);
+            //    bel.SetColor(GetColorByIndex(ind2));
+            //    bel.CellColor = GetColorByIndex(ind2);
 
-            });
+            //});
 
 
             // Парсим json
 
-            //var dictionary = JsonConvert.DeserializeObject<Dictionary<int, int>>(_jsons[_urlIndex]);
-            //KeyValuePair<int, int> lastPair = new();
+            KeyValuePair<int, int> lastPair = new();
 
-            //foreach (var pair in dictionary)
-            //{
-            //    int[] array = dictionary.Keys.ToArray();
+            foreach (var pair in _shotData.bals[_urlIndex])
+            {
+                int[] array = _shotData.bals[_urlIndex].Keys.ToArray();
 
-            //    if (pair.Key == array[array.Length - 1])
-            //    {
-            //        lastPair = pair;
+                if (pair.Key == array[array.Length - 1])
+                {
+                    lastPair = pair;
 
-            //        break;
-            //    }
+                    break;
+                }
 
-            //    //_balls[pair.Key - 1].SetColor(GetColorByIndex(pair.Value));
-            //    //_balls[pair.Key - 1].CellColor = GetColorByIndex(pair.Value);
-            //}
+                _balls[pair.Key - 1].SetColor(GetColorByIndex(pair.Value));
+                _balls[pair.Key - 1].CellColor = GetColorByIndex(pair.Value);
+            }
 
             // Получаем список целей для шарика
 
@@ -248,10 +253,10 @@ namespace Scripts.GunLogic
 
             ball.Rigidbody.AddForce(_direction.up * _speed, ForceMode2D.Impulse);
 
-            var ind = UnityEngine.Random.Range(0, 4); //1;
+            //var ind = UnityEngine.Random.Range(0, 4); //1;
 
-            ball.SetColor(GetColorByIndex(ind), true);
-            ball.CellColor = GetColorByIndex(ind);
+            ball.SetColor(GetColorByIndex(lastPair.Value), true);
+            ball.CellColor = GetColorByIndex(lastPair.Value);
             //ball.SetColor(GetColorByIndex(2), true);
             //ball.CellColor = GetColorByIndex(2);
             ball.GunShoot = this;
@@ -281,12 +286,32 @@ namespace Scripts.GunLogic
         {
             return (index) switch
             {
-                0 => CellColor.Black,
-                1 => CellColor.White,
+                0 => CellColor.White,
+                1 => CellColor.Black,
                 2 => CellColor.StarWhite,
                 3 => CellColor.StarBlack,
                 _ => throw new Exception(":(")
             };
+        }
+
+        private void InitShots(string html)
+        {
+            _shotData = JsonConvert.DeserializeObject<ShotData>(html);
+        }
+
+        // получаем html код всех сайтов
+        private void WaitHTML(string src, Action<string> action = null)
+        {
+            StartCoroutine(GetHTML(src, action));
+        }
+
+        // получаем html код с сайта
+        private IEnumerator<UnityWebRequestAsyncOperation> GetHTML(string url, Action<string> action = null)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.SendWebRequest();
+
+            action?.Invoke(www.downloadHandler.text);
         }
     }
 }
