@@ -70,7 +70,7 @@ namespace Scripts.GunLogic
         private Vector3 _ballDirection;
 
         private int _urlIndex;
-        private int _index;
+        public static int _index;
 
         private bool _allStopped;
         private bool _getAll;
@@ -108,6 +108,8 @@ namespace Scripts.GunLogic
 
         private void OnEnable()
         {
+           // AllBallsShot += () => _bidBehaviour.AddWin();
+
             StopAll += (a, b, c) => Debug.Log("First " + a + " Second " + b + " Third " + c);
 
             StopAll += (a, b, c) => _droppedBalls.BallsResult(a, b, c);
@@ -118,9 +120,6 @@ namespace Scripts.GunLogic
             DeactiveButton += () => _center.FirebutoonOff(); //*
             AllBallsShot += () => _center.FirebutoonOff(); //*
 
-            DeactiveButton += () => _center.AddBalance();
-
-            DeactiveButton += () => _bidBehaviour.AddWin();
 
             bool allStopped = false;
 
@@ -155,6 +154,8 @@ namespace Scripts.GunLogic
 
         private void OnDisable()
         {
+          //  AllBallsShot -= () => _bidBehaviour.AddWin();
+
             StopAll -= (a, b, c) => Debug.Log("First " + a + " Second " + b + " Third " + c);
 
             StopAll -= (a, b, c) => _droppedBalls.BallsResult(a, b, c);
@@ -164,8 +165,6 @@ namespace Scripts.GunLogic
             ActiveButton -= () => _center.FirebutoonOn(); //*
             DeactiveButton -= () => _center.FirebutoonOff(); //*
             AllBallsShot -= () => _center.FirebutoonOff();//*
-
-            DeactiveButton -= () => _center.AddBalance();
 
             DeactiveButton -= () => _bidBehaviour.AddWin();
 

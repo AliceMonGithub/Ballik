@@ -50,7 +50,7 @@ public class Center : MonoBehaviour
         StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), _balance));
 
         _playAgaynBuntton.SetActive(false);
-        SaveData();
+        //SaveData();
         Restart();
     }
 
@@ -61,13 +61,10 @@ public class Center : MonoBehaviour
         StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), _balance + _htmlBalance));
     }
 
-    public void SaveData()
-    {
-        PlayerPrefs.SetInt("balance", _balance + PlayerPrefs.GetInt("balance"));
-        PlayerPrefs.Save();
-
-        StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), PlayerPrefs.GetInt("balance")));
-    }
+    //public void SaveData()
+    //{
+    //    StartCoroutine(SmoothBalance(int.Parse(_balanceText.text), PlayerPrefs.GetInt("balance")));
+    //}
 
     public void LoadData(string html)
     {
@@ -75,13 +72,9 @@ public class Center : MonoBehaviour
 
         if (dictionary.TryGetValue("balans", out string balance))
         {
-            var showBalance = PlayerPrefs.GetInt("balance") + int.Parse(balance);
-
             _htmlBalance = int.Parse(balance);
 
-            bool zero = PlayerPrefs.GetInt("balance") == 0;
-
-            StartCoroutine(SmoothBalance(zero ? 0 : _htmlBalance, showBalance));
+            StartCoroutine(SmoothBalance(_htmlBalance, _htmlBalance));
         }
 
         if (dictionary.TryGetValue("1_credit", out string credit))
